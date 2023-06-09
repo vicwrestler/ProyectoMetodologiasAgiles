@@ -15,17 +15,22 @@ router.post("/productos", async(req, res) => {
 
 router.delete("/productos/:id", async(req, res) => {
     const {id} = req.params;
-    console.log(req.params);
+    // console.log(req.params);
     const [respuesta]=await pool.query("DELETE FROM Productos WHERE Clave = ?", [id]);
     res.json(respuesta);
 });
 
 router.put("/productos/", async(req, res) => {
     // const {id} = req.params;
+    
     const {Clave} = req.body;
+    let {precio} = req.body;
     const {nombre, Proveedor} = req.body;
-    console.log(req.body);
-    const [respuesta]=await pool.query("UPDATE Productos SET Nombre = ?, Proveedor = ? WHERE Clave = ?", [nombre, Proveedor, Clave]);
+    if(precio==null){
+        precio=0;
+    }
+    const [respuesta]=await pool.query("UPDATE Productos SET Nombre = ?, Proveedor = ?, Precio = ? WHERE Clave = ?", [nombre, Proveedor, parseInt(precio), Clave]);
+    
     res.json(respuesta);
 });
 
